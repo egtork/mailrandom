@@ -64,7 +64,7 @@ func parseMailConfig(filename string) *mailConfig {
 // contain an option and a weight separated by a comma.
 func parseOptionsFile(f *os.File) []*option {
 	var options []*option
-	var weightSum float64
+	var sum float64
 
 	r := csv.NewReader(f)
 	for {
@@ -78,11 +78,14 @@ func parseOptionsFile(f *os.File) []*option {
 		if err != nil {
 			fatal(err)
 		}
-		weightSum += weight
+		if weight < 0 {
+			fatal(errors.New("weights can not be negative"))
+		}
+		sum += weight
 		x := &option{
 			label:            record[0],
 			weight:           weight,
-			cumulativeWeight: weightSum,
+			cumulativeWeight: sum,
 		}
 		options = append(options, x)
 	}
@@ -99,7 +102,7 @@ func parseCommandLineOptions() []*option {
 	weights := strings.Split(*weightsInput, ",")
 	weightsSpecified := len(weights) > 0
 	if weightsSpecified && len(labels) != len(weights) {
-		panic("number of options should equal number of weights")
+		fatal(errors.New("number of options should equal number of weights"))
 	}
 	var o *option
 	var sum float64
@@ -107,10 +110,13 @@ func parseCommandLineOptions() []*option {
 	for k := 0; k < len(labels); k++ {
 		if weightsSpecified {
 			w, err := strconv.ParseFloat(weights[k], 64)
-			sum += w
 			if err != nil {
 				panic(err)
 			}
+			if w < 0 {
+				fatal(errors.New("weights can not be negative"))
+			}
+			sum += w
 			o = &option{label: labels[k], weight: w, cumulativeWeight: sum}
 		} else {
 			o = &option{label: labels[k], weight: 1, cumulativeWeight: float64(k)}
