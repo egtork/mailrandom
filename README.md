@@ -1,7 +1,7 @@
 # mailrandom
 Mail yourself a random selection from a list of weighted items
 
-I schedule this program to run daily at 3 a.m., so that a randomly selected exercise is waiting in my inbox when I wake up. It is useful for people who like surprises and/or have difficulty making decisions.
+I schedule this program to run daily at 3 a.m., so that a randomly selected activity is waiting in my inbox when I wake up.
 
 ## Usage examples
 
