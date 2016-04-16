@@ -17,6 +17,10 @@ Weighted items specified in a CSV file:
 
 If an SMTP mail server password is required but not specified using the `-p` flag, the program will look to the `MAIL_PASS` environment variable.
 
+To see all command line options, run:
+
+    mailrandom -h
+
 ## Weighting
 
 If item k has weight `w_k`, it will be selected with probability `w_k / (w_1 + w_2 + ... + w_total)`. Weights can be non-negative integers or floating point numbers.
